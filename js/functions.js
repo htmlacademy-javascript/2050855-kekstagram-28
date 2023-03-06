@@ -1,9 +1,7 @@
-// 1
 const checkLength = (str, len) => str.length <= len;
-checkLength();
+checkLength('проверяемая строка', 10);
 
-//2
-const isPalindrom = (string) => {
+const isPalindrome = (string) => {
   const tempString = string.toLowerCase().replaceAll(' ', '');
   let reverseString = '';
   for (let i = tempString.length - 1; i >= 0; i--) {
@@ -11,14 +9,8 @@ const isPalindrom = (string) => {
   }
   return tempString === reverseString;
 };
-isPalindrom();
-/* Функция для определения палиндрома у строк и чисел.
-const isPali = (st) =>
-  st.toString().toLowerCase().replaceAll(' ', '').split('').reverse().join('') ===
-  st.toString().toLowerCase().replaceAll(' ', '');
-isPali('Лёша на полке клопа нашёл ');
-*/
-//3
+isPalindrome('Довод');
+
 const extractsNumbers = (string) => {
   if (typeof string === 'number') {
     return string;
@@ -31,9 +23,9 @@ const extractsNumbers = (string) => {
   }
   return parseInt(result, 10);
 };
-extractsNumbers();
-//4
-const myPadStart = (string, minLength, pad) => {
+extractsNumbers('1 кефир, 0.5 батона');
+
+const returnsAnAugmentedString = (string, minLength, pad) => {
   const actualPad = minLength - string.length;
 
   if (actualPad <= 0) {
@@ -42,4 +34,4 @@ const myPadStart = (string, minLength, pad) => {
 
   return pad.slice(0, actualPad % pad.length) + pad.repeat(actualPad / pad.length) + string;
 };
-myPadStart();
+returnsAnAugmentedString('q', 4, 'werty');
