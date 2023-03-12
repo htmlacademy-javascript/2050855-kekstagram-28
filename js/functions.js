@@ -1,3 +1,4 @@
+/* eslint-disable no-duplicate-case */
 const checkLength = (str, len) => str.length <= len;
 checkLength('проверяемая строка', 10);
 
@@ -12,18 +13,23 @@ const isPalindrome = (string) => {
 isPalindrome('Довод');
 
 const extractsNumbers = (string) => {
-  if (typeof string === 'number') {
-    return string;
-  }
   let result = '';
-  for (let i = 0; i < string.length; i++) {
-    if (!Number.isNaN(parseInt(string.at(i), 10))) {
-      result += string.at(i);
-    }
+  switch (true) {
+    case typeof string === 'number' && Number.isInteger(string):
+      return Math.abs(string);
+    case typeof string === 'number' && !Number.isInteger(string):
+      result = string.toString().replace(/\./g , '');
+      return Math.abs(result);
+    default:
+      for (let i = 0; i < string.length; i++) {
+        if (!Number.isNaN(parseInt(string.at(i), 10))) {
+          result += string.at(i);
+        }
+      }
+      return parseInt(result, 10);
   }
-  return parseInt(result, 10);
 };
-extractsNumbers('1 кефир, 0.5 батона');
+extractsNumbers(-3.83);
 
 const returnsAnAugmentedString = (string, minLength, pad) => {
   const actualPad = minLength - string.length;
