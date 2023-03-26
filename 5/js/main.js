@@ -1,4 +1,4 @@
 import { getContent } from './data.js';
-import { renderThumbnails } from './photosdisplay.js';
+import { renderPictureContent } from './miniature.js';
 
-renderThumbnails(getContent());
+renderPictureContent(getContent());
