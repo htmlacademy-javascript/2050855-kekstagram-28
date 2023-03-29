@@ -16,4 +16,9 @@ const getRandomInteger = (a, b) => {
 const getRandomArrayElement = (array) =>
   array[getRandomInteger(0, array.length - 1)];
 
-export { generateUniqueNumber, getRandomInteger, getRandomArrayElement };
+function isEscapeKey(evt) {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+}
+const isEnterKey = (evt) => evt.key === 'Enter';
+
+export { generateUniqueNumber, getRandomInteger, getRandomArrayElement, isEscapeKey, isEnterKey };
