@@ -1,3 +1,16 @@
+const COMMENT_STEP_COUNT = 5;
+
+const getInitialCommentStateCount = (count = 0) => {
+  let countInitialCommentState = count;
+  countInitialCommentState += COMMENT_STEP_COUNT;
+  return countInitialCommentState;
+};
+
+const removeEventListener = (removeEventListenerWhere, typeOfEvent, onEventFunction) => {
+  const element = removeEventListenerWhere;
+  element.removeEventListener(typeOfEvent, onEventFunction);
+};
+
 const generateUniqueNumber = () => {
   let lastGeneratedId = 0;
   return () => {
@@ -16,4 +29,13 @@ const getRandomInteger = (a, b) => {
 const getRandomArrayElement = (array) =>
   array[getRandomInteger(0, array.length - 1)];
 
-export { generateUniqueNumber, getRandomInteger, getRandomArrayElement };
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {
+  COMMENT_STEP_COUNT,
+  getInitialCommentStateCount,
+  removeEventListener,
+  generateUniqueNumber,
+  getRandomInteger,
+  getRandomArrayElement,
+  isEscapeKey };
