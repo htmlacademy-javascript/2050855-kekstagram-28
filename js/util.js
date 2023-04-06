@@ -31,6 +31,21 @@ const getRandomArrayElement = (array) =>
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
+function GetRange(min = 0, max = 100, step = 1, value) {
+  this._min = min;
+  this._max = max;
+  this._step = step;
+  this.value = value || max;
+}
+
+GetRange.prototype.increase = function() {
+  this.value = Math.min(this.value + this._step, this._max);
+};
+
+GetRange.prototype.decrease = function() {
+  this.value = Math.max(this.value - this._step, this._min);
+};
+
 export {
   COMMENT_STEP_COUNT,
   getInitialCommentStateCount,
@@ -38,4 +53,5 @@ export {
   generateUniqueNumber,
   getRandomInteger,
   getRandomArrayElement,
-  isEscapeKey };
+  isEscapeKey,
+  GetRange };
