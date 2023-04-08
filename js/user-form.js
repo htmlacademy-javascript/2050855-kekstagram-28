@@ -1,5 +1,7 @@
 import { isEscapeKey, removeEventListener } from './util.js';
 import { pristine, unblockSubmitButton } from './validation.js';
+import { resetScale, clickScaler } from './scale.js';
+import { resetEffects } from './effects.js';
 
 const formElement = document.querySelector('.img-upload__form');
 const uploadFieldElement = document.querySelector('#upload-file');
@@ -24,6 +26,8 @@ const onCloseForm = () => {
 
 const hideForm = () => {
   onCloseForm();
+  resetScale();
+  resetEffects();
   formElement.reset();
   pristine.reset();
   unblockSubmitButton();
@@ -54,6 +58,7 @@ const onPopupForm = (evt) => {
 
 uploadFieldElement.addEventListener('change', () => {
   onShowForm();
+  clickScaler();
   cancelButtonElement.addEventListener('click', onPopupForm);
   document.addEventListener('keydown', onPopupForm);
 });

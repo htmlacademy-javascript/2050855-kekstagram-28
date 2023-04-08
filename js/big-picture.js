@@ -10,7 +10,7 @@ import {
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const cancelBigPictureButton = bigPicture.querySelector('.big-picture__cancel');
-const socialCommentLoaderButton = bigPicture.querySelector('.comments-loader');
+const socialCommentLoaderButton = bigPicture.querySelector('.social__comments-loader');
 
 const closeModal = () => {
   bigPicture.classList.add('hidden');
