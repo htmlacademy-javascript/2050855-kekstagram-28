@@ -1,4 +1,5 @@
-import { COMMENT_STEP_COUNT, getInitialCommentStateCount } from './util.js';
+import { getInitialCommentStateCount } from './util.js';
+import { COMMENT_STEP_COUNT } from './constants.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const countSocialComment = bigPicture.querySelector('.social__comment-count');

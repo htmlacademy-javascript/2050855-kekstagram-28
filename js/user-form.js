@@ -25,9 +25,9 @@ const onCloseForm = () => {
 };
 
 const hideForm = () => {
+  onCloseForm();
   resetScale();
   resetEffects();
-  onCloseForm();
   formElement.reset();
   pristine.reset();
   unblockSubmitButton();
@@ -54,7 +54,6 @@ const onPopupForm = (evt) => {
       removeEventListener(cancelButtonElement, 'click', onPopupForm);
       break;
   }
-
 };
 
 uploadFieldElement.addEventListener('change', () => {
