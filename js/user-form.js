@@ -62,3 +62,5 @@ uploadFieldElement.addEventListener('change', () => {
   cancelButtonElement.addEventListener('click', onPopupForm);
   document.addEventListener('keydown', onPopupForm);
 });
+
+export { hideForm };

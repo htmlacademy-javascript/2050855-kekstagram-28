@@ -1,3 +1,8 @@
+import { sendData } from './api.js';
+import { hideForm } from './user-form.js';
+import { showAlert } from './util.js';
+import { openErrorMessage, openSuccessMessage } from './message.js';
+
 const MAX_NUMBER_HASHTAGS = 5;
 const TAGS_ERROR_TEXT = 'Неправильно прописаны хештеги';
 const HASHTAGS_GUIDE = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -46,13 +51,24 @@ const unblockSubmitButton = () => {
   submitButtonElement.textContent = 'Опубликовать';
 };
 
-const setFormSubmit = () => {
+const setFormSubmit = (onSuccess) => {
   formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    blockSubmitButton();
+
     const isValid = pristine.validate();
     if (isValid) {
-      unblockSubmitButton();
+      blockSubmitButton();
+      sendData(new FormData(evt.target))
+        .then (onSuccess)
+        .then(openSuccessMessage)
+        .then(hideForm)
+        .catch(
+          (err) => {
+            showAlert(err.message);
+            openErrorMessage();
+          }
+        )
+        .finally(unblockSubmitButton);
     }
   });
 };
