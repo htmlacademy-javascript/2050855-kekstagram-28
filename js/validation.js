@@ -1,6 +1,6 @@
 import { sendData } from './api.js';
 import { hideForm } from './user-form.js';
-import { showAlert } from './util.js';
+//import { showAlert } from './util.js';
 import { openErrorMessage, openSuccessMessage } from './message.js';
 
 const MAX_NUMBER_HASHTAGS = 5;
@@ -51,7 +51,7 @@ const unblockSubmitButton = () => {
   submitButtonElement.textContent = 'Опубликовать';
 };
 
-const setFormSubmit = (onSuccess) => {
+const setFormSubmit = () => {
   formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -59,12 +59,11 @@ const setFormSubmit = (onSuccess) => {
     if (isValid) {
       blockSubmitButton();
       sendData(new FormData(evt.target))
-        .then (onSuccess)
+        //.then (onSuccess)
         .then(openSuccessMessage)
         .then(hideForm)
         .catch(
-          (err) => {
-            showAlert(err.message);
+          () => {
             openErrorMessage();
           }
         )

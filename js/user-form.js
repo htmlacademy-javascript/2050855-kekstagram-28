@@ -2,7 +2,7 @@ import { isEscapeKey, removeEventListener } from './util.js';
 import { pristine, unblockSubmitButton } from './validation.js';
 import { resetScale, clickScaler } from './scale.js';
 import { resetEffects } from './effects.js';
-
+import {getMessageType} from './message.js';
 const formElement = document.querySelector('.img-upload__form');
 const uploadFieldElement = document.querySelector('#upload-file');
 const overlayFormElement = document.querySelector('.img-upload__overlay');
@@ -41,7 +41,7 @@ const onPopupForm = (evt) => {
       removeEventListener(document, 'keydown', onPopupForm);
       break;
     case 'keydown':
-      if (isEscapeKey(evt) && !isFieldFocused()) {
+      if (isEscapeKey(evt) && !isFieldFocused() && getMessageType()) {
         evt.preventDefault();
         hideForm();
         removeEventListener(document, 'keydown', onPopupForm);
