@@ -1,52 +1,103 @@
-import {isEscapeKey} from './util.js';
+import { openFormAndAddEscapeListener } from './user-form.js';
+import {
+  isEscapeKey,
+  removeEventListener,
+  showAlert
+} from './util.js';
 
-const errorTemplate = document.querySelector('#error').content.querySelector('.error');
-const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorMessageElement = document.querySelector('.error');
+const successMessageElement = document.querySelector('.success');
+const errorMessageButtonElement = document.querySelector('.error__button');
+const successMessageButtonElement = document.querySelector('.success__button');
 
-const getMessageType = () => document.querySelector('.error, .success');
+const closeMessages = () => {
+  errorMessageElement.classList.add('hidden');
+  successMessageElement.classList.add('hidden');
+};
 
-const closeMessage = () => {
-  const message = getMessageType();
-  if (message) {
-    message.remove();
+const onCloseMessageError = () => {
+  errorMessageElement.classList.add('hidden');
+  openFormAndAddEscapeListener();
+};
+
+const onCloseMessageSuccess = () => {
+  successMessageElement.classList.add('hidden');
+};
+
+const onMessage = (evt) => {
+  const parentNodeElement = evt.target.parentNode;
+
+  switch (evt.type) {
+    case 'click':
+      if (errorMessageElement.classList.contains('hidden')) {
+        if (parentNodeElement.classList.contains('success__inner') || parentNodeElement.classList.contains('success')) {
+          return;
+        }
+        onCloseMessageSuccess();
+        removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
+        removeEventListener(document, 'keydown', onMessage);
+        removeEventListener(document, 'click', onMessage);
+        return;
+      }
+      if (successMessageElement.classList.contains('hidden')) {
+        if (parentNodeElement.classList.contains('error__inner') || parentNodeElement.classList.contains('error')) {
+          return;
+        }
+        onCloseMessageError();
+        removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
+        removeEventListener(document, 'keydown', onMessage);
+        removeEventListener(document, 'click', onMessage);
+      }
+      break;
+    case 'keydown':
+      if (isEscapeKey(evt)) {
+        evt.preventDefault();
+        if (errorMessageElement.classList.contains('hidden')) {
+          onCloseMessageSuccess();
+          removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
+          removeEventListener(document, 'keydown', onMessage);
+          removeEventListener(document, 'click', onMessage);
+          return;
+        }
+        if (successMessageElement.classList.contains('hidden')) {
+          onCloseMessageError();
+          removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
+          removeEventListener(document, 'keydown', onMessage);
+          removeEventListener(document, 'click', onMessage);
+        }
+      }
+      break;
+    default:
+      closeMessages();
+      removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
+      removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
+      removeEventListener(document, 'keydown', onMessage);
+      removeEventListener(document, 'click', onMessage);
+      break;
   }
-
-  document.removeEventListener('click', onOutsideClick);
-  document.removeEventListener('keydown', onMessageKeydown);
 };
 
 const openErrorMessage = () => {
-  const error = errorTemplate.cloneNode(true);
-  document.body.append(error);
-  const errorButton = document.querySelector('.error__button');
-  errorButton.addEventListener('click', closeMessage);
-
-  document.addEventListener('click', onOutsideClick);
-  document.addEventListener('keydown', onMessageKeydown);
+  errorMessageElement.classList.remove('hidden');
+  errorMessageButtonElement.addEventListener('click', onCloseMessageError);
+  document.addEventListener('keydown', onMessage);
+  document.addEventListener('click', onMessage);
 };
 
 const openSuccessMessage = () => {
-  const success = successTemplate.cloneNode(true);
-  document.body.append(success);
-  const successButton = document.querySelector('.success__button');
-  successButton.addEventListener('click', closeMessage);
-
-  document.addEventListener('click', onOutsideClick);
-  document.addEventListener('keydown', onMessageKeydown);
+  successMessageElement.classList.remove('hidden');
+  successMessageButtonElement.addEventListener('click', onCloseMessageSuccess);
+  document.addEventListener('keydown', onMessage);
+  document.addEventListener('click', onMessage);
 };
 
-function onMessageKeydown (evt) {
-  if (isEscapeKey(evt) && getMessageType()) {
-    evt.preventDefault();
-    closeMessage();
-  }
-}
+const openLoadingMessage = () => {
+  showAlert('Идет загрузка...');
+  document.querySelector('.loading').classList.remove('hidden');
+};
 
-function onOutsideClick (evt) {
-  const type = getMessageType();
-  if (evt.target === type) {
-    closeMessage();
-  }
-}
-
-export {getMessageType, openErrorMessage, openSuccessMessage};
+export {
+  openErrorMessage,
+  openSuccessMessage,
+  openLoadingMessage
+};

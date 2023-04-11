@@ -18,4 +18,11 @@ const renderPictureContent = (pictures) => {
   pictureContainer.appendChild(pictureFragment);
 };
 
-export { renderPictureContent };
+const removePhotoContent = () => {
+  const images = document.querySelectorAll('.picture');
+  if (images) {
+    images.forEach((image) => image.remove());
+  }
+};
+
+export { renderPictureContent, removePhotoContent };

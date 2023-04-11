@@ -1,11 +1,10 @@
 import { sendData } from './api.js';
-import { hideForm } from './user-form.js';
-//import { showAlert } from './util.js';
 import { openErrorMessage, openSuccessMessage } from './message.js';
-
-const MAX_NUMBER_HASHTAGS = 5;
-const TAGS_ERROR_TEXT = 'Неправильно прописаны хештеги';
-const HASHTAGS_GUIDE = /^#[a-zа-яё0-9]{1,19}$/i;
+import {
+  MAX_NUMBER_HASHTAGS,
+  TAGS_ERROR_TEXT,
+  HASHTAGS_GUIDE,
+} from './constants.js';
 
 const uploadImgElement = document.querySelector('.img-upload');
 const formElement = uploadImgElement.querySelector('.img-upload__form');
@@ -51,27 +50,29 @@ const unblockSubmitButton = () => {
   submitButtonElement.textContent = 'Опубликовать';
 };
 
-const setFormSubmit = () => {
+const setFormSubmit = (onSuccess, onError) => {
   formElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     const isValid = pristine.validate();
+
     if (isValid) {
       blockSubmitButton();
-      sendData(new FormData(evt.target))
-        //.then (onSuccess)
-        .then(openSuccessMessage)
-        .then(hideForm)
-        .catch(
-          () => {
-            openErrorMessage();
-          }
-        )
-        .finally(unblockSubmitButton);
+
+      sendData(
+        () => {
+          onSuccess();
+          openSuccessMessage();
+          unblockSubmitButton();
+        },
+        () => {
+          onError();
+          openErrorMessage();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target)
+      );
     }
   });
 };
 
-export {setFormSubmit, pristine, unblockSubmitButton};
-
-
+export { setFormSubmit, pristine, unblockSubmitButton };
