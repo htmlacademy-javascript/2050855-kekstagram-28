@@ -56,9 +56,27 @@ const onPopupForm = (evt) => {
   }
 };
 
+const openFormAndAddEscapeListener = () => {
+  onShowForm();
+  document.addEventListener('keydown', onPopupForm);
+};
+
+const closeFormAndRemoveEscapeListener = () => {
+  onCloseForm();
+  removeEventListener(document, 'keydown', onPopupForm);
+};
+
+const hideFormAndRemoveAllListener = () => {
+  hideForm();
+  removeEventListener(document, 'keydown', onPopupForm);
+  removeEventListener(cancelButtonElement, 'click', onPopupForm);
+};
+
 uploadFieldElement.addEventListener('change', () => {
   onShowForm();
   clickScaler();
   cancelButtonElement.addEventListener('click', onPopupForm);
   document.addEventListener('keydown', onPopupForm);
 });
+
+export { openFormAndAddEscapeListener, closeFormAndRemoveEscapeListener, hideFormAndRemoveAllListener };
