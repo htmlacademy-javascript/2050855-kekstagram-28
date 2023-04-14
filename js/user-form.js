@@ -33,50 +33,58 @@ const hideForm = () => {
   unblockSubmitButton();
 };
 
-const onPopupForm = (evt) => {
+const onPopupFormClick = (evt) => {
   switch (evt.type) {
     case 'click':
       hideForm();
-      removeEventListener(cancelButtonElement, 'click', onPopupForm);
-      removeEventListener(document, 'keydown', onPopupForm);
+      removeEventListener(cancelButtonElement, 'click', onPopupFormClick);
       break;
+    default:
+      hideForm();
+      removeEventListener(cancelButtonElement, 'click', onPopupFormClick);
+      break;
+  }
+};
+
+const onPopupFormKeydown = (evt) => {
+  switch (evt.type) {
     case 'keydown':
       if (isEscapeKey(evt) && !isFieldFocused()) {
         evt.preventDefault();
         hideForm();
-        removeEventListener(document, 'keydown', onPopupForm);
-        removeEventListener(cancelButtonElement, 'click', onPopupForm);
+        removeEventListener(document, 'keydown', onPopupFormKeydown);
+        removeEventListener(cancelButtonElement, 'click', onPopupFormClick);
       }
       break;
     default:
       hideForm();
-      removeEventListener(document, 'keydown', onPopupForm);
-      removeEventListener(cancelButtonElement, 'click', onPopupForm);
+      removeEventListener(document, 'keydown', onPopupFormKeydown);
+      removeEventListener(cancelButtonElement, 'click', onPopupFormClick);
       break;
   }
 };
 
 const openFormAndAddEscapeListener = () => {
   onShowForm();
-  document.addEventListener('keydown', onPopupForm);
+  document.addEventListener('keydown', onPopupFormKeydown);
 };
 
 const closeFormAndRemoveEscapeListener = () => {
   onCloseForm();
-  removeEventListener(document, 'keydown', onPopupForm);
+  removeEventListener(document, 'keydown', onPopupFormKeydown);
 };
 
 const hideFormAndRemoveAllListener = () => {
   hideForm();
-  removeEventListener(document, 'keydown', onPopupForm);
-  removeEventListener(cancelButtonElement, 'click', onPopupForm);
+  removeEventListener(document, 'keydown', onPopupFormKeydown);
+  removeEventListener(cancelButtonElement, 'click', onPopupFormClick);
 };
 
 uploadFieldElement.addEventListener('change', () => {
   onShowForm();
   clickScaler();
-  cancelButtonElement.addEventListener('click', onPopupForm);
-  document.addEventListener('keydown', onPopupForm);
+  cancelButtonElement.addEventListener('click', onPopupFormClick);
+  document.addEventListener('keydown', onPopupFormKeydown);
 });
 
 export { openFormAndAddEscapeListener, closeFormAndRemoveEscapeListener, hideFormAndRemoveAllListener };

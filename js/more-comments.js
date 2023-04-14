@@ -26,7 +26,7 @@ const hideSocialCommentsLoader = () => {
   countInitialCommentState = getInitialCommentStateCount(0);
 };
 
-const onSocialComments = () => {
+const onSocialCommentsClick = () => {
   const arrSocialComments = getCommentsData();
   const showFollowComments = arrSocialComments.slice(countInitialCommentState, countInitialCommentState + countCommentStep);
   showFollowComments.forEach((element) => element.classList.remove('hidden'));
@@ -57,12 +57,12 @@ const uploadMoreComment = () => {
 };
 
 const addEventListenerSocialCommentsLoader = () => {
-  socialCommentLoaderButton.addEventListener('click', onSocialComments);
+  socialCommentLoaderButton.addEventListener('click', onSocialCommentsClick);
 };
 
 export {
   uploadMoreComment,
   clearCommentMarkupCounterState,
-  onSocialComments,
+  onSocialCommentsClick,
   addEventListenerSocialCommentsLoader
 };

@@ -3,7 +3,7 @@ import { renderComments, clearComments } from './comments.js';
 import {
   uploadMoreComment,
   clearCommentMarkupCounterState,
-  onSocialComments,
+  onSocialCommentsClick,
   addEventListenerSocialCommentsLoader
 } from './more-comments.js';
 
@@ -25,18 +25,11 @@ const closeModalByEscape = (evt, typeOfEvent, handleEventFunction) => {
   }
 };
 
-const onBigPicture = (evt) => {
+const onBigPictureKeydown = (evt) => {
   switch (evt.type) {
-    case 'click':
-      closeModal();
-      removeEventListener(cancelBigPictureButton, 'click', onBigPicture);
-      removeEventListener(document, 'keydown', onBigPicture);
-      removeEventListener(socialCommentLoaderButton, 'click', onSocialComments);
-      clearCommentMarkupCounterState();
-      break;
     case 'keydown':
-      closeModalByEscape(evt, 'keydown', onBigPicture);
-      removeEventListener(socialCommentLoaderButton, 'click', onSocialComments);
+      closeModalByEscape(evt, 'keydown', onBigPictureKeydown);
+      removeEventListener(socialCommentLoaderButton, 'click', onSocialCommentsClick);
       clearCommentMarkupCounterState();
       break;
     default:
@@ -45,12 +38,28 @@ const onBigPicture = (evt) => {
   }
 };
 
+const onBigPictureClick = (evt) => {
+  switch (evt.type) {
+    case 'click':
+      closeModal();
+      removeEventListener(cancelBigPictureButton, 'click', onBigPictureClick);
+      removeEventListener(document, 'keydown', onBigPictureKeydown);
+      removeEventListener(socialCommentLoaderButton, 'click', onSocialCommentsClick);
+      clearCommentMarkupCounterState();
+      break;
+    default:
+      closeModal();
+      break;
+  }
+};
+
+
 const renderBigPicture = ((url, likes, comments, description) => {
   bigPicture.classList.remove('hidden');
   socialCommentLoaderButton.classList.remove('hidden');
 
-  cancelBigPictureButton.addEventListener('click', onBigPicture);
-  document.addEventListener('keydown', onBigPicture);
+  cancelBigPictureButton.addEventListener('click', onBigPictureClick);
+  document.addEventListener('keydown', onBigPictureKeydown);
 
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
