@@ -15,16 +15,45 @@ const closeMessages = () => {
   successMessageElement.classList.add('hidden');
 };
 
-const onCloseMessageError = () => {
+const onMessageErrorClose = () => {
   errorMessageElement.classList.add('hidden');
   openFormAndAddEscapeListener();
 };
 
-const onCloseMessageSuccess = () => {
+const onMessageSuccessClose = () => {
   successMessageElement.classList.add('hidden');
 };
 
-const onMessage = (evt) => {
+const onMessageKeydown = (evt) => {
+
+  switch (evt.type) {
+    case 'keydown':
+      if (isEscapeKey(evt)) {
+        evt.preventDefault();
+        if (errorMessageElement.classList.contains('hidden')) {
+          onMessageSuccessClose();
+          removeEventListener(successMessageButtonElement, 'click', onMessageSuccessClose);
+          removeEventListener(document, 'keydown', onMessageKeydown);
+          return;
+        }
+        if (successMessageElement.classList.contains('hidden')) {
+          onMessageErrorClose();
+          removeEventListener(errorMessageButtonElement, 'click', onMessageErrorClose);
+          removeEventListener(document, 'keydown', onMessageKeydown);
+        }
+      }
+      break;
+    default:
+      closeMessages();
+      removeEventListener(successMessageButtonElement, 'click', onMessageSuccessClose);
+      removeEventListener(errorMessageButtonElement, 'click', onMessageErrorClose);
+      removeEventListener(document, 'keydown', onMessageKeydown);
+      break;
+  }
+};
+
+
+const onMessageClick = (evt) => {
   const parentNodeElement = evt.target.parentNode;
 
   switch (evt.type) {
@@ -33,62 +62,44 @@ const onMessage = (evt) => {
         if (parentNodeElement.classList.contains('success__inner') || parentNodeElement.classList.contains('success')) {
           return;
         }
-        onCloseMessageSuccess();
-        removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
-        removeEventListener(document, 'keydown', onMessage);
-        removeEventListener(document, 'click', onMessage);
+        onMessageSuccessClose();
+        removeEventListener(successMessageButtonElement, 'click', onMessageSuccessClose);
+        removeEventListener(document, 'keydown', onMessageKeydown);
+        removeEventListener(document, 'click', onMessageClick);
         return;
       }
       if (successMessageElement.classList.contains('hidden')) {
         if (parentNodeElement.classList.contains('error__inner') || parentNodeElement.classList.contains('error')) {
           return;
         }
-        onCloseMessageError();
-        removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
-        removeEventListener(document, 'keydown', onMessage);
-        removeEventListener(document, 'click', onMessage);
-      }
-      break;
-    case 'keydown':
-      if (isEscapeKey(evt)) {
-        evt.preventDefault();
-        if (errorMessageElement.classList.contains('hidden')) {
-          onCloseMessageSuccess();
-          removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
-          removeEventListener(document, 'keydown', onMessage);
-          removeEventListener(document, 'click', onMessage);
-          return;
-        }
-        if (successMessageElement.classList.contains('hidden')) {
-          onCloseMessageError();
-          removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
-          removeEventListener(document, 'keydown', onMessage);
-          removeEventListener(document, 'click', onMessage);
-        }
+        onMessageErrorClose();
+        removeEventListener(errorMessageButtonElement, 'click', onMessageErrorClose);
+        removeEventListener(document, 'keydown', onMessageKeydown);
+        removeEventListener(document, 'click', onMessageClick);
       }
       break;
     default:
       closeMessages();
-      removeEventListener(successMessageButtonElement, 'click', onCloseMessageSuccess);
-      removeEventListener(errorMessageButtonElement, 'click', onCloseMessageError);
-      removeEventListener(document, 'keydown', onMessage);
-      removeEventListener(document, 'click', onMessage);
+      removeEventListener(successMessageButtonElement, 'click', onMessageSuccessClose);
+      removeEventListener(errorMessageButtonElement, 'click', onMessageErrorClose);
+      removeEventListener(document, 'click', onMessageClick);
       break;
   }
 };
 
+
 const openErrorMessage = () => {
   errorMessageElement.classList.remove('hidden');
-  errorMessageButtonElement.addEventListener('click', onCloseMessageError);
-  document.addEventListener('keydown', onMessage);
-  document.addEventListener('click', onMessage);
+  errorMessageButtonElement.addEventListener('click', onMessageErrorClose);
+  document.addEventListener('keydown', onMessageKeydown);
+  document.addEventListener('click', onMessageClick);
 };
 
 const openSuccessMessage = () => {
   successMessageElement.classList.remove('hidden');
-  successMessageButtonElement.addEventListener('click', onCloseMessageSuccess);
-  document.addEventListener('keydown', onMessage);
-  document.addEventListener('click', onMessage);
+  successMessageButtonElement.addEventListener('click', onMessageSuccessClose);
+  document.addEventListener('keydown', onMessageKeydown);
+  document.addEventListener('click', onMessageClick);
 };
 
 const openLoadingMessage = () => {
